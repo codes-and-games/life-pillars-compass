@@ -14,16 +14,221 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      goals: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          description: string | null
+          due_date: string | null
+          frequency: Database["public"]["Enums"]["goal_frequency"]
+          id: string
+          pillar: Database["public"]["Enums"]["pillar_type"]
+          status: Database["public"]["Enums"]["goal_status"]
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          frequency: Database["public"]["Enums"]["goal_frequency"]
+          id?: string
+          pillar: Database["public"]["Enums"]["pillar_type"]
+          status?: Database["public"]["Enums"]["goal_status"]
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          frequency?: Database["public"]["Enums"]["goal_frequency"]
+          id?: string
+          pillar?: Database["public"]["Enums"]["pillar_type"]
+          status?: Database["public"]["Enums"]["goal_status"]
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      journals: {
+        Row: {
+          content: string
+          created_at: string
+          entry_date: string
+          id: string
+          mood: Database["public"]["Enums"]["mood_type"]
+          pillar: Database["public"]["Enums"]["pillar_type"]
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          entry_date?: string
+          id?: string
+          mood: Database["public"]["Enums"]["mood_type"]
+          pillar: Database["public"]["Enums"]["pillar_type"]
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          entry_date?: string
+          id?: string
+          mood?: Database["public"]["Enums"]["mood_type"]
+          pillar?: Database["public"]["Enums"]["pillar_type"]
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          age: number | null
+          avatar_url: string | null
+          created_at: string
+          current_streak: number
+          id: string
+          last_goal_completion_date: string | null
+          longest_streak: number
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          age?: number | null
+          avatar_url?: string | null
+          created_at?: string
+          current_streak?: number
+          id: string
+          last_goal_completion_date?: string | null
+          longest_streak?: number
+          name?: string
+          updated_at?: string
+        }
+        Update: {
+          age?: number | null
+          avatar_url?: string | null
+          created_at?: string
+          current_streak?: number
+          id?: string
+          last_goal_completion_date?: string | null
+          longest_streak?: number
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      time_logs: {
+        Row: {
+          activity: string
+          created_at: string
+          duration_minutes: number
+          end_time: string | null
+          id: string
+          notes: string | null
+          pillar: Database["public"]["Enums"]["pillar_type"]
+          start_time: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          activity: string
+          created_at?: string
+          duration_minutes: number
+          end_time?: string | null
+          id?: string
+          notes?: string | null
+          pillar: Database["public"]["Enums"]["pillar_type"]
+          start_time?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          activity?: string
+          created_at?: string
+          duration_minutes?: number
+          end_time?: string | null
+          id?: string
+          notes?: string | null
+          pillar?: Database["public"]["Enums"]["pillar_type"]
+          start_time?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      visions: {
+        Row: {
+          achieved_at: string | null
+          created_at: string
+          description: string
+          id: string
+          is_achieved: boolean
+          pillar: Database["public"]["Enums"]["pillar_type"]
+          priority: string
+          target_date: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          achieved_at?: string | null
+          created_at?: string
+          description: string
+          id?: string
+          is_achieved?: boolean
+          pillar: Database["public"]["Enums"]["pillar_type"]
+          priority?: string
+          target_date?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          achieved_at?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          is_achieved?: boolean
+          pillar?: Database["public"]["Enums"]["pillar_type"]
+          priority?: string
+          target_date?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      update_user_streak: {
+        Args: { user_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
-      [_ in never]: never
+      goal_frequency: "daily" | "weekly" | "monthly"
+      goal_status: "pending" | "completed" | "overdue"
+      mood_type: "excellent" | "good" | "neutral" | "bad" | "terrible"
+      pillar_type:
+        | "Health"
+        | "Academics"
+        | "Passions"
+        | "Relationship"
+        | "Career"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +355,17 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      goal_frequency: ["daily", "weekly", "monthly"],
+      goal_status: ["pending", "completed", "overdue"],
+      mood_type: ["excellent", "good", "neutral", "bad", "terrible"],
+      pillar_type: [
+        "Health",
+        "Academics",
+        "Passions",
+        "Relationship",
+        "Career",
+      ],
+    },
   },
 } as const
