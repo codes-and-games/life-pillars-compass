@@ -35,7 +35,7 @@ export const useTimeLogs = () => {
     }
   };
 
-  const createTimeLog = async (logData: Omit<TimeLog, 'id' | 'user_id' | 'created_at' | 'updated_at'>) => {
+  const createTimeLog = async (logData: Partial<TimeLog> & { activity: string; pillar: TimeLog['pillar']; duration_minutes: number }) => {
     if (!user) return;
 
     try {

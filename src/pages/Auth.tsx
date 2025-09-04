@@ -39,7 +39,11 @@ export const Auth = () => {
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    await signUp(signUpData.email, signUpData.password, signUpData.name);
+    const { error } = await signUp(signUpData.email, signUpData.password, signUpData.name);
+    if (!error) {
+      // Redirect to setup after successful signup
+      window.location.href = '/setup';
+    }
     setIsSubmitting(false);
   };
 

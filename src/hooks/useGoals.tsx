@@ -35,7 +35,7 @@ export const useGoals = () => {
     }
   };
 
-  const createGoal = async (goalData: Omit<Goal, 'id' | 'user_id' | 'created_at' | 'updated_at'>) => {
+  const createGoal = async (goalData: Partial<Goal> & { title: string; pillar: Goal['pillar']; frequency: Goal['frequency'] }) => {
     if (!user) return;
 
     try {

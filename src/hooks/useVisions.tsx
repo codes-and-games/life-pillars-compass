@@ -35,7 +35,7 @@ export const useVisions = () => {
     }
   };
 
-  const createVision = async (visionData: Omit<Vision, 'id' | 'user_id' | 'created_at' | 'updated_at'>) => {
+  const createVision = async (visionData: Partial<Vision> & { title: string; description: string; pillar: Vision['pillar'] }) => {
     if (!user) return;
 
     try {

@@ -3,8 +3,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Target, Plus, Clock, Calendar, CheckCircle, Loader2 } from "lucide-react";
+import { Target, Plus, Clock, Calendar, CheckCircle, Loader2, Pencil, Trash2 } from "lucide-react";
 import { useGoals } from "@/hooks/useGoals";
+import { GoalForm } from "@/components/forms/GoalForm";
 
 const getPillarColor = (pillar: string) => {
   const colors = {
@@ -19,7 +20,7 @@ const getPillarColor = (pillar: string) => {
 
 export const Goals = () => {
   const [activeTab, setActiveTab] = useState("daily");
-  const { goals, loading, toggleComplete } = useGoals();
+  const { goals, loading, toggleComplete, deleteGoal } = useGoals();
 
   const goalsByFrequency = {
     daily: goals.filter(goal => goal.frequency === 'daily'),
@@ -44,10 +45,7 @@ export const Goals = () => {
             Manage your daily, weekly, and monthly objectives
           </p>
         </div>
-        <Button className="bg-gradient-primary">
-          <Plus className="w-4 h-4 mr-2" />
-          New Goal
-        </Button>
+        <GoalForm />
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
@@ -97,9 +95,26 @@ export const Goals = () => {
                           )}
                         </div>
                       </div>
-                      <Badge variant="secondary" className={`${getPillarColor(goal.pillar)} text-white`}>
-                        {goal.pillar}
-                      </Badge>
+                      <div className="flex items-center space-x-2">
+                        <Badge variant="secondary" className={`${getPillarColor(goal.pillar)} text-white`}>
+                          {goal.pillar}
+                        </Badge>
+                        <GoalForm 
+                          goal={goal} 
+                          trigger={
+                            <Button variant="ghost" size="sm">
+                              <Pencil className="w-4 h-4" />
+                            </Button>
+                          }
+                        />
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          onClick={() => deleteGoal(goal.id)}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -115,10 +130,14 @@ export const Goals = () => {
                     <p className="text-sm text-muted-foreground mb-4">
                       Create your first {period} goal to get started
                     </p>
-                    <Button variant="outline">
-                      <Plus className="w-4 h-4 mr-2" />
-                      Add Goal
-                    </Button>
+                    <GoalForm 
+                      trigger={
+                        <Button variant="outline">
+                          <Plus className="w-4 h-4 mr-2" />
+                          Add Goal
+                        </Button>
+                      }
+                    />
                   </CardContent>
                 </Card>
               )}
