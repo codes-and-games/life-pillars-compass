@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./hooks/useAuth";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Layout } from "./components/Layout";
+import { ThemeProvider } from "./components/ThemeProvider";
 import { Dashboard } from "./components/Dashboard";
 import { Goals } from "./pages/Goals";
 import { Visions } from "./pages/Visions";
@@ -14,37 +15,41 @@ import { TimeLogs } from "./pages/TimeLogs";
 import { Insights } from "./pages/Insights";
 import { Settings } from "./pages/Settings";
 import { Auth } from "./pages/Auth";
+import { PillarSetup } from "./pages/PillarSetup";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <AuthProvider>
-          <Routes>
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/" element={
-              <ProtectedRoute>
-                <Layout />
-              </ProtectedRoute>
-            }>
-              <Route index element={<Dashboard />} />
-              <Route path="goals" element={<Goals />} />
-              <Route path="visions" element={<Visions />} />
-              <Route path="journals" element={<Journals />} />
-              <Route path="time-logs" element={<TimeLogs />} />
-              <Route path="insights" element={<Insights />} />
-              <Route path="settings" element={<Settings />} />
-            </Route>
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </AuthProvider>
-      </BrowserRouter>
-    </TooltipProvider>
+    <ThemeProvider defaultTheme="system" storageKey="lifepillars-theme">
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <AuthProvider>
+            <Routes>
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/setup" element={<PillarSetup />} />
+              <Route path="/" element={
+                <ProtectedRoute>
+                  <Layout />
+                </ProtectedRoute>
+              }>
+                <Route index element={<Dashboard />} />
+                <Route path="goals" element={<Goals />} />
+                <Route path="visions" element={<Visions />} />
+                <Route path="journals" element={<Journals />} />
+                <Route path="time-logs" element={<TimeLogs />} />
+                <Route path="insights" element={<Insights />} />
+                <Route path="settings" element={<Settings />} />
+              </Route>
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </AuthProvider>
+        </BrowserRouter>
+      </TooltipProvider>
+    </ThemeProvider>
   </QueryClientProvider>
 );
 

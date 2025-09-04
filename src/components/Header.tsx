@@ -8,6 +8,7 @@ import {
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/hooks/useAuth";
+import { ThemeToggle } from "./ThemeToggle";
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -47,6 +48,8 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
               className="pl-10 w-64"
             />
           </div>
+          
+          <ThemeToggle />
           
           <Button variant="ghost" size="sm" className="relative">
             <Bell className="w-5 h-5" />

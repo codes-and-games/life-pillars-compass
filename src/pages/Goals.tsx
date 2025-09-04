@@ -3,23 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Target, Plus, Clock, Calendar, CheckCircle } from "lucide-react";
-
-const mockGoals = {
-  daily: [
-    { id: 1, title: "Morning workout", pillar: "Health", completed: true },
-    { id: 2, title: "Read 30 minutes", pillar: "Academics", completed: false },
-    { id: 3, title: "Practice guitar", pillar: "Passions", completed: false },
-  ],
-  weekly: [
-    { id: 4, title: "Complete project proposal", pillar: "Career", completed: false },
-    { id: 5, title: "Call family", pillar: "Relationship", completed: true },
-  ],
-  monthly: [
-    { id: 6, title: "Launch side project", pillar: "Career", completed: false },
-    { id: 7, title: "Read 3 books", pillar: "Academics", completed: false },
-  ],
-};
+import { Target, Plus, Clock, Calendar, CheckCircle, Loader2 } from "lucide-react";
+import { useGoals } from "@/hooks/useGoals";
 
 const getPillarColor = (pillar: string) => {
   const colors = {
@@ -34,6 +19,21 @@ const getPillarColor = (pillar: string) => {
 
 export const Goals = () => {
   const [activeTab, setActiveTab] = useState("daily");
+  const { goals, loading, toggleComplete } = useGoals();
+
+  const goalsByFrequency = {
+    daily: goals.filter(goal => goal.frequency === 'daily'),
+    weekly: goals.filter(goal => goal.frequency === 'weekly'),
+    monthly: goals.filter(goal => goal.frequency === 'monthly'),
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="w-8 h-8 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -66,10 +66,10 @@ export const Goals = () => {
           </TabsTrigger>
         </TabsList>
 
-        {Object.entries(mockGoals).map(([period, goals]) => (
+        {Object.entries(goalsByFrequency).map(([period, periodGoals]) => (
           <TabsContent key={period} value={period} className="space-y-4">
             <div className="grid gap-4">
-              {goals.map((goal) => (
+              {periodGoals.map((goal) => (
                 <Card key={goal.id} className="hover-lift">
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
@@ -78,19 +78,23 @@ export const Goals = () => {
                           variant="ghost"
                           size="sm"
                           className={`w-8 h-8 rounded-full ${
-                            goal.completed 
+                            goal.status === 'completed'
                               ? "bg-success text-success-foreground" 
                               : "border-2 border-muted"
                           }`}
+                          onClick={() => toggleComplete(goal.id)}
                         >
-                          {goal.completed && <CheckCircle className="w-4 h-4" />}
+                          {goal.status === 'completed' && <CheckCircle className="w-4 h-4" />}
                         </Button>
                         <div>
                           <h3 className={`font-medium ${
-                            goal.completed ? "line-through text-muted-foreground" : "text-foreground"
+                            goal.status === 'completed' ? "line-through text-muted-foreground" : "text-foreground"
                           }`}>
                             {goal.title}
                           </h3>
+                          {goal.description && (
+                            <p className="text-sm text-muted-foreground">{goal.description}</p>
+                          )}
                         </div>
                       </div>
                       <Badge variant="secondary" className={`${getPillarColor(goal.pillar)} text-white`}>
@@ -101,7 +105,7 @@ export const Goals = () => {
                 </Card>
               ))}
               
-              {goals.length === 0 && (
+              {periodGoals.length === 0 && (
                 <Card className="hover-lift">
                   <CardContent className="p-12 text-center">
                     <Target className="w-16 h-16 mx-auto mb-4 text-muted-foreground opacity-50" />
