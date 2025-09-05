@@ -1,31 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Eye, Plus, Star } from "lucide-react";
-
-const mockVisions = [
-  { 
-    id: 1, 
-    title: "Become a fitness instructor", 
-    pillar: "Health", 
-    description: "Complete certification and start teaching classes",
-    priority: "high"
-  },
-  { 
-    id: 2, 
-    title: "Master data science", 
-    pillar: "Academics", 
-    description: "Complete advanced courses and build portfolio projects",
-    priority: "medium"
-  },
-  { 
-    id: 3, 
-    title: "Launch music album", 
-    pillar: "Passions", 
-    description: "Write, record, and release my first full album",
-    priority: "high"
-  },
-];
+import { Eye, Plus, Star, Pencil, Trash2, Loader2 } from "lucide-react";
+import { useVisions } from "@/hooks/useVisions";
+import { VisionForm } from "@/components/forms/VisionForm";
 
 const getPillarColor = (pillar: string) => {
   const colors = {
@@ -39,6 +17,16 @@ const getPillarColor = (pillar: string) => {
 };
 
 export const Visions = () => {
+  const { visions, loading, deleteVision } = useVisions();
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="w-8 h-8 animate-spin" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -48,23 +36,37 @@ export const Visions = () => {
             Define your long-term aspirations and dreams
           </p>
         </div>
-        <Button className="bg-gradient-primary">
-          <Plus className="w-4 h-4 mr-2" />
-          New Vision
-        </Button>
+        <VisionForm />
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {mockVisions.map((vision) => (
+        {visions.map((vision) => (
           <Card key={vision.id} className="hover-lift group">
             <CardHeader className="pb-3">
               <div className="flex items-start justify-between">
                 <Badge variant="secondary" className={`${getPillarColor(vision.pillar)} text-white mb-2`}>
                   {vision.pillar}
                 </Badge>
-                {vision.priority === "high" && (
-                  <Star className="w-4 h-4 text-warning fill-current" />
-                )}
+                <div className="flex items-center space-x-1">
+                  {vision.priority === "high" && (
+                    <Star className="w-4 h-4 text-warning fill-current" />
+                  )}
+                  <VisionForm 
+                    vision={vision} 
+                    trigger={
+                      <Button variant="ghost" size="sm">
+                        <Pencil className="w-3 h-3" />
+                      </Button>
+                    }
+                  />
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    onClick={() => deleteVision(vision.id)}
+                  >
+                    <Trash2 className="w-3 h-3" />
+                  </Button>
+                </div>
               </div>
               <CardTitle className="text-lg group-hover:text-primary transition-smooth">
                 {vision.title}
@@ -82,30 +84,35 @@ export const Visions = () => {
                 }`}>
                   {vision.priority} priority
                 </span>
-                <Button variant="ghost" size="sm">
-                  View Details
-                </Button>
+                <span className={`text-xs ${vision.is_achieved ? 'text-success' : 'text-muted-foreground'}`}>
+                  {vision.is_achieved ? 'Achieved' : 'In Progress'}
+                </span>
               </div>
             </CardContent>
           </Card>
         ))}
 
-        {/* Add new vision card */}
-        <Card className="hover-lift border-dashed border-2 border-muted">
-          <CardContent className="p-12 text-center">
-            <Eye className="w-16 h-16 mx-auto mb-4 text-muted-foreground opacity-50" />
-            <h3 className="text-lg font-medium text-muted-foreground mb-2">
-              Create a Vision
-            </h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              Add a new long-term goal or aspiration
-            </p>
-            <Button variant="outline">
-              <Plus className="w-4 h-4 mr-2" />
-              Add Vision
-            </Button>
-          </CardContent>
-        </Card>
+        {visions.length === 0 && (
+          <Card className="hover-lift border-dashed border-2 border-muted col-span-full">
+            <CardContent className="p-12 text-center">
+              <Eye className="w-16 h-16 mx-auto mb-4 text-muted-foreground opacity-50" />
+              <h3 className="text-lg font-medium text-muted-foreground mb-2">
+                No Visions Yet
+              </h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                Start defining your long-term aspirations
+              </p>
+              <VisionForm 
+                trigger={
+                  <Button variant="outline">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Vision
+                  </Button>
+                }
+              />
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );

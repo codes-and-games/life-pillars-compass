@@ -15,9 +15,10 @@ interface TimeLogFormProps {
   timeLog?: TimeLog;
   onSuccess?: () => void;
   trigger?: React.ReactNode;
+  onStartTimer?: (activity: string, pillar: PillarType) => void;
 }
 
-export const TimeLogForm = ({ timeLog, onSuccess, trigger }: TimeLogFormProps) => {
+export const TimeLogForm = ({ timeLog, onSuccess, trigger, onStartTimer }: TimeLogFormProps) => {
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
     activity: timeLog?.activity || "",
@@ -42,6 +43,14 @@ export const TimeLogForm = ({ timeLog, onSuccess, trigger }: TimeLogFormProps) =
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // If onStartTimer is provided and we have activity and pillar, start timer instead
+    if (onStartTimer && formData.activity && formData.pillar && !timeLog) {
+      onStartTimer(formData.activity, formData.pillar);
+      setOpen(false);
+      return;
+    }
+    
     setLoading(true);
 
     try {
@@ -167,7 +176,9 @@ export const TimeLogForm = ({ timeLog, onSuccess, trigger }: TimeLogFormProps) =
               Cancel
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading ? 'Saving...' : timeLog ? 'Update Log' : 'Create Log'}
+              {loading ? 'Processing...' : 
+               onStartTimer && !timeLog ? 'Start Timer' : 
+               timeLog ? 'Update Log' : 'Create Log'}
             </Button>
           </div>
         </form>
