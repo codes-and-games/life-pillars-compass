@@ -5,6 +5,7 @@ import { ThemeToggle } from "./ThemeToggle";
 import { SearchCommand } from "./SearchCommand";
 import { useAuth } from "@/hooks/useAuth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,6 +20,7 @@ interface HeaderProps {
 export const Header = ({ onMenuClick }: HeaderProps) => {
   const { user, signOut, profile } = useAuth();
   const [searchOpen, setSearchOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <header className="bg-card border-b border-border px-4 lg:px-8 py-4">
@@ -73,8 +75,9 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuItem>Help</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate('/settings')}>
+                Settings
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={signOut}>Sign out</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

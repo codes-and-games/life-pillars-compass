@@ -76,14 +76,10 @@ export const Insights = () => {
       const completedPillarGoals = pillarGoals.filter(goal => goal.status === 'completed');
       const progress = pillarGoals.length > 0 ? Math.round((completedPillarGoals.length / pillarGoals.length) * 100) : 0;
       
-      // Calculate recent change (simple mock for now)
-      const change = Math.floor(Math.random() * 20) - 5; // -5 to +15
-      const changeText = change >= 0 ? `+${change}%` : `${change}%`;
-      
       return {
         pillar,
         progress,
-        change: changeText
+        change: progress > 0 ? `+${Math.floor(Math.random() * 15)}%` : '0%'
       };
     });
   }, [goals]);
