@@ -112,6 +112,15 @@ export const useGoals = () => {
   };
 
   const toggleComplete = async (id: string) => {
+    if (!user?.id) {
+      toast({
+        title: "Error",
+        description: "You must be logged in to update goals",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const goal = goals.find(g => g.id === id);
     if (!goal) return;
 
@@ -121,7 +130,22 @@ export const useGoals = () => {
       completed_at: newStatus === 'completed' ? new Date().toISOString() : undefined
     };
 
-    await updateGoal(id, updates);
+    try {
+      await updateGoal(id, updates);
+
+      // Update streak if completing a daily goal
+      if (newStatus === 'completed' && goal.frequency === 'daily') {
+        const { error: streakError } = await supabase.rpc('update_user_streak', {
+          user_id: user.id
+        });
+        
+        if (streakError) {
+          console.error('Error updating streak:', streakError);
+        }
+      }
+    } catch (error: any) {
+      console.error('Error toggling goal completion:', error);
+    }
   };
 
   useEffect(() => {
