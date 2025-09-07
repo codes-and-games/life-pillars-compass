@@ -48,6 +48,15 @@ export const TimeLogForm = ({ timeLog, onSuccess, trigger, onStartTimer }: TimeL
     if (onStartTimer && formData.activity && formData.pillar && !timeLog) {
       onStartTimer(formData.activity, formData.pillar);
       setOpen(false);
+      // Reset form after starting timer
+      setFormData({
+        activity: "",
+        pillar: "Health",
+        duration_minutes: 0,
+        notes: "",
+        start_time: "",
+        end_time: "",
+      });
       return;
     }
     
@@ -86,7 +95,11 @@ export const TimeLogForm = ({ timeLog, onSuccess, trigger, onStartTimer }: TimeL
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{timeLog ? 'Edit Time Log' : 'Create New Time Log'}</DialogTitle>
+          <DialogTitle>
+            {timeLog ? 'Edit Time Log' : 
+             onStartTimer ? 'Start Timer' : 
+             'Create New Time Log'}
+          </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
@@ -119,46 +132,53 @@ export const TimeLogForm = ({ timeLog, onSuccess, trigger, onStartTimer }: TimeL
             </Select>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          {/* Only show time fields for manual entries, not for timer starts */}
+          {!onStartTimer && (
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="start_time">Start Time (Optional)</Label>
+                <Input
+                  id="start_time"
+                  type="datetime-local"
+                  value={formData.start_time}
+                  onChange={(e) => {
+                    setFormData({ ...formData, start_time: e.target.value });
+                    setTimeout(calculateDuration, 100);
+                  }}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="end_time">End Time (Optional)</Label>
+                <Input
+                  id="end_time"
+                  type="datetime-local"
+                  value={formData.end_time}
+                  onChange={(e) => {
+                    setFormData({ ...formData, end_time: e.target.value });
+                    setTimeout(calculateDuration, 100);
+                  }}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Only show duration for manual entries */}
+          {!onStartTimer && (
             <div className="space-y-2">
-              <Label htmlFor="start_time">Start Time (Optional)</Label>
+              <Label htmlFor="duration">Duration (minutes)</Label>
               <Input
-                id="start_time"
-                type="datetime-local"
-                value={formData.start_time}
-                onChange={(e) => {
-                  setFormData({ ...formData, start_time: e.target.value });
-                  setTimeout(calculateDuration, 100);
-                }}
+                id="duration"
+                type="number"
+                value={formData.duration_minutes}
+                onChange={(e) => setFormData({ ...formData, duration_minutes: parseInt(e.target.value) || 0 })}
+                placeholder="Duration in minutes"
+                min="1"
+                required
               />
             </div>
+          )}
 
-            <div className="space-y-2">
-              <Label htmlFor="end_time">End Time (Optional)</Label>
-              <Input
-                id="end_time"
-                type="datetime-local"
-                value={formData.end_time}
-                onChange={(e) => {
-                  setFormData({ ...formData, end_time: e.target.value });
-                  setTimeout(calculateDuration, 100);
-                }}
-              />
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="duration">Duration (minutes)</Label>
-            <Input
-              id="duration"
-              type="number"
-              value={formData.duration_minutes}
-              onChange={(e) => setFormData({ ...formData, duration_minutes: parseInt(e.target.value) || 0 })}
-              placeholder="Duration in minutes"
-              min="1"
-              required
-            />
-          </div>
 
           <div className="space-y-2">
             <Label htmlFor="notes">Notes (Optional)</Label>
