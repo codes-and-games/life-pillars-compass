@@ -11,6 +11,7 @@ import {
   X
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -28,6 +29,8 @@ const navigation = [
 ];
 
 export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
+  const { user, profile } = useAuth();
+  
   return (
     <div className={cn(
       "fixed inset-y-0 left-0 z-50 w-64 bg-card border-r border-border transform transition-transform duration-300 ease-in-out lg:translate-x-0",
@@ -82,11 +85,17 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
         <div className="p-4 border-t border-border">
           <div className="flex items-center space-x-3 p-3 rounded-lg bg-muted/50">
             <div className="w-8 h-8 bg-gradient-success rounded-full flex items-center justify-center">
-              <span className="text-xs font-bold text-white">U</span>
+              <span className="text-xs font-bold text-white">
+                {(profile?.name || user?.email || "U").charAt(0).toUpperCase()}
+              </span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-foreground truncate">User</p>
-              <p className="text-xs text-muted-foreground">🔥 0 day streak</p>
+              <p className="text-sm font-medium text-foreground truncate">
+                {profile?.name || user?.email?.split('@')[0] || 'User'}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                🔥 {profile?.current_streak || 0} day streak
+              </p>
             </div>
           </div>
         </div>
