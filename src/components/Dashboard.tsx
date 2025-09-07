@@ -39,10 +39,13 @@ export const Dashboard = () => {
   }
 
   // Calculate real statistics
-  const todayGoals = goals.filter(goal => 
-    goal.frequency === 'daily' && 
-    (!goal.due_date || new Date(goal.due_date).toDateString() === new Date().toDateString())
-  );
+  const todayGoals = goals.filter(goal => {
+    if (goal.frequency === 'daily') return true;
+    if (goal.due_date) {
+      return new Date(goal.due_date).toDateString() === new Date().toDateString();
+    }
+    return false;
+  });
   const completedTodayGoals = todayGoals.filter(goal => goal.status === 'completed');
   
   const activeVisions = visions.filter(vision => !vision.is_achieved);

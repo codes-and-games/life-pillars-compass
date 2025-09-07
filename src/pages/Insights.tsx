@@ -72,7 +72,7 @@ export const Insights = () => {
     const pillars = ['Health', 'Academics', 'Passions', 'Relationship', 'Career'];
     
     return pillars.map(pillar => {
-      const pillarGoals = goals.filter(goal => goal.pillar === pillar.toLowerCase());
+      const pillarGoals = goals.filter(goal => goal.pillar === pillar);
       const completedPillarGoals = pillarGoals.filter(goal => goal.status === 'completed');
       const progress = pillarGoals.length > 0 ? Math.round((completedPillarGoals.length / pillarGoals.length) * 100) : 0;
       
@@ -90,7 +90,7 @@ export const Insights = () => {
     
     pillars.forEach(pillar => {
       const pillarTime = timeLogs
-        .filter(log => log.pillar === pillar.toLowerCase())
+        .filter(log => log.pillar === pillar)
         .reduce((sum, log) => sum + log.duration_minutes, 0);
       distribution[pillar] = Math.round(pillarTime / 60 * 10) / 10;
     });

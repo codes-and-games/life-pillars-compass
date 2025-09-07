@@ -25,8 +25,8 @@ export const TimeLogForm = ({ timeLog, onSuccess, trigger, onStartTimer }: TimeL
     pillar: (timeLog?.pillar || "Health") as PillarType,
     duration_minutes: timeLog?.duration_minutes || 0,
     notes: timeLog?.notes || "",
-    start_time: timeLog?.start_time ? new Date(timeLog.start_time).toISOString().slice(0, 16) : "",
-    end_time: timeLog?.end_time ? new Date(timeLog.end_time).toISOString().slice(0, 16) : "",
+    start_time: timeLog?.start_time ? new Date(timeLog.start_time).toISOString().slice(0, 16) : new Date().toISOString().slice(0, 16),
+    end_time: timeLog?.end_time ? new Date(timeLog.end_time).toISOString().slice(0, 16) : new Date().toISOString().slice(0, 16),
   });
   const [loading, setLoading] = useState(false);
   const { createTimeLog, updateTimeLog } = useTimeLogs();
@@ -93,13 +93,18 @@ export const TimeLogForm = ({ timeLog, onSuccess, trigger, onStartTimer }: TimeL
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px]" aria-describedby="dialog-description">
         <DialogHeader>
           <DialogTitle>
             {timeLog ? 'Edit Time Log' : 
              onStartTimer ? 'Start Timer' : 
              'Create New Time Log'}
           </DialogTitle>
+          <p id="dialog-description" className="text-sm text-muted-foreground">
+            {timeLog ? 'Modify your existing time log entry' : 
+             onStartTimer ? 'Fill in details to start tracking time' : 
+             'Add a manual time log entry'}
+          </p>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
