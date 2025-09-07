@@ -39,9 +39,17 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
             <h2 className="text-xl font-semibold text-foreground">
               Welcome back, {profile?.name || user?.email?.split('@')[0] || 'User'}!
             </h2>
-            <p className="text-sm text-muted-foreground">
-              Ready to achieve your goals today?
-            </p>
+            <div className="flex items-center space-x-4">
+              <p className="text-sm text-muted-foreground">
+                Ready to achieve your goals today?
+              </p>
+              <div className="flex items-center space-x-1 bg-gradient-success/20 px-2 py-1 rounded-full">
+                <span className="text-xs font-medium">🔥</span>
+                <span className="text-xs font-semibold text-foreground">
+                  {profile?.current_streak || 0} day streak
+                </span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -74,7 +82,17 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="w-56">
+              <div className="p-2 border-b border-border">
+                <p className="font-medium text-foreground">{profile?.name || user?.email?.split('@')[0] || 'User'}</p>
+                <p className="text-sm text-muted-foreground">{user?.email}</p>
+                <div className="flex items-center space-x-1 mt-1">
+                  <span className="text-xs">🔥</span>
+                  <span className="text-xs font-medium text-foreground">
+                    {profile?.current_streak || 0} day streak
+                  </span>
+                </div>
+              </div>
               <DropdownMenuItem onClick={() => navigate('/settings')}>
                 Settings
               </DropdownMenuItem>
