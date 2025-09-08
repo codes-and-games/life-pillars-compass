@@ -80,31 +80,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const signUp = async (email: string, password: string, name?: string) => {
-    const redirectUrl = `${window.location.origin}/setup`;
-    
     const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: redirectUrl,
-        data: name ? { name } : undefined
-      }
+        emailRedirectTo: `${window.location.origin}`,
+        data: name ? { name } : undefined,
+      },
     });
 
     if (error) {
       toast({
-        title: "Sign Up Error",
+        title: "Sign up failed",
         description: error.message,
         variant: "destructive",
       });
-    } else {
-      toast({
-        title: "Check your email",
-        description: "Please check your email for a confirmation link.",
-      });
+      return { error };
     }
 
-    return { error };
+    toast({
+      title: "Check your email!",
+      description: "We sent you a confirmation link. Please check your email to complete your registration.",
+    });
+
+    return { error: null };
   };
 
   const signIn = async (email: string, password: string) => {
