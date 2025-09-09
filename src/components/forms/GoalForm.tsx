@@ -59,7 +59,7 @@ export const GoalForm = ({ goal, onSuccess, trigger }: GoalFormProps) => {
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="w-[95vw] max-w-[425px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{goal ? 'Edit Goal' : 'Create New Goal'}</DialogTitle>
         </DialogHeader>
@@ -86,7 +86,7 @@ export const GoalForm = ({ goal, onSuccess, trigger }: GoalFormProps) => {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="pillar">Life Pillar</Label>
               <Select 
@@ -134,11 +134,11 @@ export const GoalForm = ({ goal, onSuccess, trigger }: GoalFormProps) => {
             />
           </div>
 
-          <div className="flex justify-end space-x-2 pt-4">
-            <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+          <div className="flex flex-col sm:flex-row justify-end gap-2 pt-4">
+            <Button type="button" variant="outline" onClick={() => setOpen(false)} className="w-full sm:w-auto">
               Cancel
             </Button>
-            <Button type="submit" disabled={loading}>
+            <Button type="submit" disabled={loading} className="w-full sm:w-auto">
               {loading ? 'Saving...' : goal ? 'Update Goal' : 'Create Goal'}
             </Button>
           </div>

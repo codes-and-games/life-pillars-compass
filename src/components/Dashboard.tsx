@@ -105,26 +105,26 @@ export const Dashboard = () => {
       {/* Welcome Section */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Dashboard</h1>
           <p className="text-muted-foreground mt-1">
             Track your progress across all life pillars
           </p>
         </div>
         
-        <div className="flex items-center space-x-4">
-          <Card className="p-4 bg-gradient-success text-white">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:space-x-4 sm:space-y-0">
+          <Card className="p-3 sm:p-4 bg-gradient-success text-white">
             <div className="flex items-center space-x-3">
-              <Flame className="w-6 h-6" />
+              <Flame className="w-5 h-5 sm:w-6 sm:h-6" />
               <div>
-                <p className="text-sm opacity-90">Current Streak</p>
-                <p className="text-2xl font-bold">{profile?.current_streak || 0} days</p>
+                <p className="text-xs sm:text-sm opacity-90">Current Streak</p>
+                <p className="text-xl sm:text-2xl font-bold">{profile?.current_streak || 0} days</p>
               </div>
             </div>
           </Card>
           
           <GoalForm 
             trigger={
-              <Button className="bg-gradient-primary hover:opacity-90">
+              <Button className="bg-gradient-primary hover:opacity-90 w-full sm:w-auto">
                 <Plus className="w-4 h-4 mr-2" />
                 Quick Add
               </Button>

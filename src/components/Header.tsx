@@ -23,24 +23,24 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
   const navigate = useNavigate();
 
   return (
-    <header className="bg-card border-b border-border px-4 lg:px-8 py-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
+    <header className="bg-card border-b border-border px-3 sm:px-4 lg:px-8 py-3 sm:py-4">
+      <div className="flex items-center justify-between gap-2 sm:gap-4">
+        <div className="flex items-center space-x-2 sm:space-x-4">
           <Button
             variant="ghost"
             size="sm"
             onClick={onMenuClick}
-            className="lg:hidden"
+            className="lg:hidden p-2"
           >
-            <Menu className="w-5 h-5" />
+            <Menu className="w-4 h-4 sm:w-5 sm:h-5" />
           </Button>
           
           <div className="hidden sm:block">
-            <h2 className="text-xl font-semibold text-foreground">
+            <h2 className="text-lg sm:text-xl font-semibold text-foreground">
               Welcome back, {profile?.name || user?.email?.split('@')[0] || 'User'}!
             </h2>
             <div className="flex items-center space-x-4">
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 Ready to achieve your goals today?
               </p>
               <div className="flex items-center space-x-1 bg-gradient-success/20 px-2 py-1 rounded-full">
@@ -54,29 +54,30 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
         </div>
 
         {/* Search */}
-        <div className="flex-1 max-w-lg mx-8">
+        <div className="flex-1 max-w-xs sm:max-w-lg mx-2 sm:mx-8">
           <Button
             variant="outline"
-            className="relative w-full justify-start text-muted-foreground"
+            className="relative w-full justify-start text-muted-foreground text-xs sm:text-sm px-2 sm:px-3"
             onClick={() => setSearchOpen(true)}
           >
-            <Search className="mr-2 h-4 w-4" />
-            Search goals, journals, visions...
-            <kbd className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 select-none text-xs text-muted-foreground">
+            <Search className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
+            <span className="hidden xs:inline">Search goals, journals, visions...</span>
+            <span className="xs:hidden">Search...</span>
+            <kbd className="pointer-events-none absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 select-none text-xs text-muted-foreground hidden sm:inline">
               ⌘K
             </kbd>
           </Button>
         </div>
 
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-2 sm:space-x-4">
           <ThemeToggle />
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                <Avatar className="h-8 w-8">
+              <Button variant="ghost" className="relative h-6 w-6 sm:h-8 sm:w-8 rounded-full p-0">
+                <Avatar className="h-6 w-6 sm:h-8 sm:w-8">
                   <AvatarImage src={profile?.avatar_url || ""} alt={profile?.name || ""} />
-                  <AvatarFallback>
+                  <AvatarFallback className="text-xs sm:text-sm">
                     {(profile?.name || user?.email || "U").charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
